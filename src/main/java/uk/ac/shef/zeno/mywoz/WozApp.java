@@ -22,7 +22,8 @@ public class WozApp {
     private HashSet<String> foods;
     LinkedList<String> queue;
     boolean speaking = false;
-
+    private int dummy;
+    
     void start() {
         wizard = new ButtonWizard(this);
         queue = new LinkedList<String>();
