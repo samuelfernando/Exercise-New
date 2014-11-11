@@ -20,7 +20,6 @@ public class WozApp {
     ToRobot robot;
     private HashSet<String> gestures;
     private HashSet<String> foods;
-    private int dummy_temp;
     LinkedList<String> queue;
     boolean speaking = false;
 
