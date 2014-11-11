@@ -1,0 +1,9 @@
+User_Ready
+Wave
+Hands_Up
+Smile
+Unrecognised
+Hesitant
+Full_Response
+Prompt
+Finish

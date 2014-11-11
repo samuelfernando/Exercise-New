@@ -1,0 +1,7 @@
+chips
+fish
+meat
+chocolate
+sweets
+pasta
+unrecognised

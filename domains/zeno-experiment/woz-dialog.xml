@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain>
+
+    <initialstate>
+        <variable id="user_greeted">
+            <value prob="1">false</value>
+        </variable>
+        <variable id="simon_says_actions">
+            <value prob="1">[WAVE, JUMP, HANDS_UP]</value>
+        </variable>
+        <variable id="simon_says_count">
+            <value prob="1">0.0</value>
+        </variable>
+        
+
+    </initialstate>
+
+    <model trigger="u_u">
+        <rule>
+            <case>
+                <effect>
+                    <set var="a_u" value="{u_u}"/>
+                </effect>
+            </case>
+        </rule>
+    </model>
+
+    <!-- Action selection model -->
+    <model trigger="a_u">
+        <rule id="express">
+            <case>
+                <condition operator="And">
+                    <if var="a_u" value="USER_READY" />
+                    <if var="user_greeted" value="false" />  
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Greet_User" />
+                    <set var="user_greeted" value="true" />
+                </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_u" value="EXERCISE_FINISHED" />
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Explain_Food" />
+                </effect>
+            </case>
+             <case>
+                <condition operator="and">
+                    <if var="a_u" value="{simon_says_actions}" relation="in"/>
+                    <if var="simon_says_count" value="3"/> 
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Finish_Simon_Says" />
+                </effect>
+            </case>
+            <case>
+                <condition operator="and">
+                    <if var="a_u" value="{simon_says_actions}" relation="in"/>
+                    <if var="simon_says_count" value="3" relation="&lt;"/> 
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="{a_u}" />
+                    <set var="simon_says_count" value="{simon_says_count}+1"/>
+                </effect>
+            </case>
+           
+          
+            <case>
+                <condition>
+                    <if var="a_u" value="FOOD_FINISHED" />
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Say_Goodbye" />
+                </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_u" value="SHY_HESITANT" />
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Dont_Be_Shy" />
+                </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_u" value="Mention_Exercise({X})" />
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Refer_Exercise({X})" />
+                </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_u" value="Unrecognised_Exercise" />
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Not_Recognised_Exercise" />
+                </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_u" value="Mention_Food({Y})" />
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Refer_Food({Y})" />
+                </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_u" value="Unrecognised_Food" />
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Not_Recognised_Food" />
+                </effect>
+            </case>
+         
+            
+        </rule>		
+
+    </model>
+
+
+    <!-- NLG model -->
+    <model trigger="a_m">
+        <rule>
+            <case>
+                <condition>
+                    <if var="a_m" value="Greet_User" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="OK now it is my turn to play Simon Says! This time you tell me what to do! Let's see how many I can get right." />
+                </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_m" value="{simon_says_actions}" relation="in"/>
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="{a_m}"/>
+                 </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_m" value="Finish_Simon_Says" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="OK we had 3 goes, I think that's enough Simon Says now. I can't move as much as you can!"/>
+                 </effect>
+            </case>
+           
+            
+            
+            <case>
+                <condition>
+                    <if var="a_m" value="Healthy_Living_Intro" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="OK let's talk about healthy living. One important part of healthy living is exercise. Exercise includes sports like football or cricket. But exercise also includes everyday activities like walking to and from school. What is your favourite exercise?" />
+                </effect>
+            </case>
+            <case>
+                <condition>
+                   <if var="a_m" value="Refer_Exercise({X})" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="I've heard of {X}. Please tell me more about {X}."/>
+                </effect>
+            </case>
+            <case>
+                <condition>
+                   <if var="a_m" value="Not_Recognised_Exercise" />
+                </condition>
+                <effect util="1">
+                     <set var="u_m" value="I've not heard of that exercise. Please tell me more about it."/>
+                </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_m" value="Refer_Food({Y})" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="I've heard of {Y}. Please tell me more about {Y}."/>
+                </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_m" value="Not_Recognised_Food" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="I've not heard of that food. Please tell me more about it."/>
+                </effect>
+            </case>
+            
+              <case>
+                <condition>
+                    <if var="a_m" value="Explain_Food" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="OK. Another part of healthy living is nutrition. This means eating healthy food and avoiding unhealthy foods. What is your favourite food? "/>
+                </effect>
+            </case>
+              <case>
+                <condition>
+                    <if var="a_m" value="Say_Goodbye" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="OK that's great. Thank you for talking with me, it was very helpful. Next time we meet I hope we can talk some more! Goodbye for now. "/>
+                </effect>
+            </case>
+              <case>
+                <condition>
+                    <if var="a_m" value="Dont_Be_Shy" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="It's OK, don't be shy. You can talk to me. "/>
+                </effect>
+            </case>
+          
+            
+
+        </rule>
+    </model>
+
+
+</domain>

@@ -1,0 +1,20 @@
+Hello	Hello there
+Hi	Hi there
+Howdy	Howdy partner
+Goodbye	Goodbye for now
+Name?	What's your name partner?
+Nice	You look like a nice person
+Simon-Says?	Do you want to play a game of Simon Says?
+Occupation?	So what do you do for a living?
+Prompt1	That sounds interesting. Tell me more.
+Prompt2	Wow, that is cool. I'd like to hear more!
+Alone	I'm all alone. Why is no-one talking to me?
+Wonder	Why am I here? Why did you bring me to London?
+MyNameIs	My name is Zeno
+Default	Default
+NewPhrase3	New Phrase 3
+NewPhrase4	New Phrase 4
+Wave	Wave
+Happy	Happy
+Sad	Sad
+Onehand	Onehand

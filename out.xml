@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<interaction>
+<userTurn>
+<variable id="u_u">
+<value>wave</value>
+</variable>
+</userTurn>
+<systemTurn>
+<variable id="u_m">
+<value>wave</value>
+</variable>
+</systemTurn>
+<userTurn>
+<variable id="u_u">
+<value>wave</value>
+</variable>
+</userTurn>
+<systemTurn>
+<variable id="u_m">
+<value>wave</value>
+</variable>
+</systemTurn>
+<userTurn>
+<variable id="u_u">
+<value>wave</value>
+</variable>
+</userTurn>
+<systemTurn>
+<variable id="u_m">
+<value>wave</value>
+</variable>
+</systemTurn>
+<userTurn>
+<variable id="u_u">
+<value>wave</value>
+</variable>
+</userTurn>
+<systemTurn>
+<variable id="u_m">
+<value>Finish</value>
+</variable>
+</systemTurn>
+<userTurn>
+<variable id="u_u">
+<value>wave</value>
+</variable>
+</userTurn>
+<systemTurn>
+<variable id="u_m">
+<value>wave</value>
+</variable>
+</systemTurn>
+<userTurn>
+<variable id="u_u">
+<value>wave</value>
+</variable>
+</userTurn>
+<systemTurn>
+<variable id="u_m">
+<value>wave</value>
+</variable>
+</systemTurn>
+</interaction>

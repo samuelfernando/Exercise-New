@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain>
+
+    <initialstate>
+        <variable id="user_greeted">
+            <value prob="1">false</value>
+        </variable>
+    </initialstate>
+
+
+    <!-- Action selection model -->
+    <model trigger="a_u">
+        <rule id="express">
+            <case>
+                <condition>
+                    <if var="a_u" value="User_Ready" />
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Greet_User" />
+                    <set var="user_greeted" value="true" />
+                </effect>
+            </case>
+            <case>
+                <condition operator="And">
+                    <if var="a_u" value="Yes" />
+                    <if var="user_greeted" value="true" />
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Explain_Session" />
+                </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_u" value="Request({X})" />
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Do_Request({X})" />
+                </effect>
+            </case>
+        </rule>		
+
+    </model>
+
+
+    <!-- NLG model -->
+    <model trigger="a_m">
+        <rule>
+            <case>
+                <condition>
+                    <if var="a_m" value="Do_Request({X})" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="Ok, doing {X}" />
+                </effect>
+            </case>
+        </rule>
+    </model>
+
+
+</domain>

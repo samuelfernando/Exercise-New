@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain>
+
+    <!-- Set initial variables-->
+    <initialstate>
+        <variable id="count">
+            <value prob="1">0.0</value>
+        </variable>
+        <variable id="actions">
+            <value prob="1">[wave, jump, hands_up]</value>
+        </variable>
+    </initialstate>
+
+    <!--NLU model-->
+    <model trigger="u_u">
+        <rule>
+            <case>
+                <effect>
+                    <set var="a_u" value="{u_u}"/>
+                </effect>
+            </case>
+        </rule>
+    </model>
+
+    <!-- Action selection model -->
+    <model trigger="a_u">
+        <rule>
+             <case>
+                <condition operator="and">
+                    <if var="a_u" value="{actions}" relation="in"/>
+                    <if var="count" value="3"/> 
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Finish" />
+                </effect>
+            </case>
+            <case>
+                <condition operator="and">
+                    <if var="a_u" value="{actions}" relation="in"/>
+                    <if var="count" value="3" relation="&lt;"/> 
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="{a_u}" />
+                </effect>
+            </case>
+             <case>
+                <condition operator="and">
+                    <if var="a_u" value="{actions}" relation="in"/>
+                    <if var="count" value="3" relation="&gt;"/> 
+                </condition>
+                <effect util="1">
+                    <set var="a_m" value="Finish" />
+                </effect>
+            </case>
+            
+        </rule>	
+        
+         <rule>
+            <case>
+                <condition>
+                    <if var="a_m" value="{actions}" relation="in"/>
+                </condition>
+                <effect>
+                    <set var="count" value="{count}+1"/>
+                 </effect>
+            </case>
+        </rule> 	
+    </model>
+
+
+    <!-- NLG model -->
+    <model trigger="a_m">
+        <rule>
+          
+            <case>
+                <condition>
+                    <if var="a_m" value="{actions}" relation="in"/>
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="{a_m} {count}"/>
+                 </effect>
+            </case>
+            <case>
+                <condition>
+                    <if var="a_m" value="Finish" />
+                </condition>
+                <effect util="1">
+                    <set var="u_m" value="OK we had 3 goes, let's do something else now!"/>
+                 </effect>
+            </case>            
+
+        </rule>
+    </model>
+
+
+</domain>
