@@ -6,7 +6,6 @@ package uk.ac.shef.zeno.mywoz;
 
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import uk.ac.shef.zeno.utils.Utils;
 
 /**
@@ -18,7 +17,6 @@ public class WozApp {
     WozState state = WozState.NOTHINGNESS;
     ButtonWizard wizard;
     ToRobot robot;
-    private HashSet<String> gestures;
     private HashSet<String> foods;
     LinkedList<String> queue;
     boolean speaking = false;
@@ -26,10 +24,9 @@ public class WozApp {
     
     void start() {
         wizard = new ButtonWizard(this);
-        queue = new LinkedList<String>();
+        queue = new LinkedList<>();
         robot = new ToRobot();
-        gestures = Utils.readSet("gestures.txt");
-        foods = new HashSet<String>();
+        foods = Utils.readSet("resources/foods.txt");
         wizard.start();
 
     }
@@ -49,7 +46,6 @@ public class WozApp {
             String text = queue.poll();
             if (text.equals("User_Ready")) {
                 state = WozState.USER_READY;
-
             } else {
                 System.err.println("Unexpected input");
                 System.exit(1);
@@ -66,19 +62,16 @@ public class WozApp {
                 return;
             }
             String text = queue.poll();
-            if (gestures.contains(text)) {
+            //if (gestures.contains(text)) {
+            if (robot.hasAnimation(text)) {
                 robot.addToQueue("Doing " + text);
                 robot.playAnimation(text);
-
             } else if (text.equals("Hesitant")) {
                 robot.addToQueue("Don't be shy");
-
             } else if (text.equals("Unrecognised")) {
                 robot.addToQueue("I didn't get that");
-
             } else if (text.equals("Full_Response")) {
                 robot.addToQueue("OK enough, let's move on.");
-
                 state = WozState.FOOD_TALK;
             }
         }
@@ -97,25 +90,16 @@ public class WozApp {
 
             if (foods.contains(text)) {
                 robot.addToQueue("I know about food " + text);
-
             } else if (text.equals("Hesitant")) {
                 robot.addToQueue("Don't be shy");
-
             } else if (text.equals("Unrecognised")) {
                 robot.addToQueue("I don't know about that food. Tell me more.");
-
             } else if (text.equals("Full_Response")) {
                 robot.addToQueue("OK enough. Any questions for me?");
-
                 state = WozState.FINISH;
             }
         }
 
-        /*if (gestures.contains(text)) {
-         robot.playAnimation(text);
-         } else {
-         robot.speak(text);
-         }*/
     }
 
     public static void main(String args[]) {

@@ -19,14 +19,10 @@
 // =================================================================                                                                   
 package uk.ac.shef.zeno.mywoz;
 
-
 import org.mechio.api.speech.messaging.RemoteSpeechServiceClient;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import org.mechio.api.animation.Animation;
-
-
 
 import org.mechio.api.animation.messaging.RemoteAnimationPlayerClient;
 import org.mechio.api.motion.Robot.RobotPositionMap;
@@ -40,8 +36,9 @@ import uk.ac.shef.zeno.utils.Utils;
  * Simple example of a synchronous module for the domain specified in
  * domains/examples/example-step-by-step.xml.
  *
- * <p>The example creates a visual grid of size GRID_SIZE and updates the
- * position of the agent in accordance with the movements.
+ * <p>
+ * The example creates a visual grid of size GRID_SIZE and updates the position
+ * of the agent in accordance with the movements.
  *
  * @author Pierre Lison (plison@ifi.uio.no)
  * @version $Date:: 2014-04-16 17:34:31 #$
@@ -56,26 +53,26 @@ public class ToRobot {
     RobotPositionMap storedPositions;
     boolean robotActive;
     HashMap<String, Animation> animations;
-   DefaultSpeechJob currentSpeechJob = null;
+    DefaultSpeechJob currentSpeechJob = null;
     private boolean robotSpeechPendingComplete;
     private long endOfSpeech;
-     LinkedList<String> queue;
+    LinkedList<String> queue;
     
     public ToRobot() {
         HashMap<String, String> configs = Utils.readConfig();
-        animations = new HashMap<String, Animation>();
+        animations = new HashMap<>();
         Animation happyAnim = MechIO.loadAnimation("animations/victory.xml");
         Animation sadAnim = MechIO.loadAnimation("animations/disappointed.xml");
         Animation waveAnim = MechIO.loadAnimation("animations/robokind-wave.xml");
         Animation onehandAnim = MechIO.loadAnimation("animations/robokind-onehandwave.xml");
-
+        
         animations.put("Happy", happyAnim);
         animations.put("Sad", sadAnim);
         animations.put("Wave", waveAnim);
         animations.put("Onehand", onehandAnim);
         
         robotActive = Boolean.parseBoolean(configs.get("robot-active"));
-        queue = new LinkedList<String>();
+        queue = new LinkedList<>();
         if (robotActive) {
             String robotID = "myRobot";
             String robotIP = configs.get("ip");
@@ -88,14 +85,15 @@ public class ToRobot {
             mySpeaker = MechIO.connectSpeechService();
         }
     }
-
-
+    
     void addToQueue(String text) {
         queue.add(text);
     }
     
     void flushQueue() {
-        if (queue.isEmpty()) return;
+        if (queue.isEmpty()) {
+            return;
+        }
         if (speechFinished()) {
             String text = queue.poll();
             speak(text);
@@ -104,7 +102,7 @@ public class ToRobot {
     
     void speak(String text) {
         if (robotActive) {
-             currentSpeechJob = (DefaultSpeechJob)mySpeaker.speak(text);
+            currentSpeechJob = (DefaultSpeechJob) mySpeaker.speak(text);
         } else {
             System.out.println(text);
         }
@@ -116,55 +114,51 @@ public class ToRobot {
             if (name.equals("Default")) {
                 RobotPositionMap map = myRobot.getDefaultPositions();
                 myRobot.move(map, 1000);
-            }
-            else {
+            } else {
                 Animation anim = animations.get(name);
                 animPlayer.playAnimation(anim);
             }
-        }
-        else {
-            System.out.println("anim "+name);
-        
+        } else {
+            System.out.println("anim " + name);
+            
         }
         
     }
     
-   
-
+    boolean hasAnimation(String text) {
+        return animations.containsKey(text);
+    }
+    
     boolean speechFinished() {
         long now = System.currentTimeMillis();
         if (robotActive) {
-            if (currentSpeechJob==null) {
+            if (currentSpeechJob == null) {
                 if (robotSpeechPendingComplete) {
-                    if (now>endOfSpeech) {
+                    if (now > endOfSpeech) {
                         robotSpeechPendingComplete = false;
                         return true;
-                    }
-                    else {
-            
+                    } else {
+                        
                         return false;
                     }
-                }
-                else {
+                } else {
                     return true;
                 }
-            }
-            else {
-                boolean ret = (currentSpeechJob.getStatus()==DefaultSpeechJob.COMPLETE);
+            } else {
+                boolean ret = (currentSpeechJob.getStatus() == DefaultSpeechJob.COMPLETE);
                 if (ret) {
                     this.robotSpeechPendingComplete = true;
                     currentSpeechJob = null;
-                    endOfSpeech = now+500;
-                
+                    endOfSpeech = now + 500;
+                    
                 }
                 return false;
                 
             }
-        }
-        else {
+        } else {
             
             return true;
         }
     }
-
+    
 }

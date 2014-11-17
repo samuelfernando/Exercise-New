@@ -75,7 +75,7 @@ public class ButtonWizard  {
         panel.setLayout(gridLayout);
         frame.add(panel);
         
-        ArrayList<String> options = Utils.readList("options.txt");
+        ArrayList<String> options = Utils.readList("resources/options.txt");
         
         addButtons(panel, options);
         

@@ -1,8 +1,0 @@
-cricket
-football
-tennis
-walking
-running
-swimming
-cycling
-unrecognised
